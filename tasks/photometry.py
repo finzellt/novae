@@ -12,7 +12,7 @@ def do_photometry(catalog)
 	"""
 	"""
 	#path to root ONC directory
-	ONC = ''
+	ONC = catalog.get_current_task_repo()
 	ticket_directory = os.path.join(ONC, 'Tickets', 'CompletedTickets')
 	task_str = catalog.get_current_task_str()
 	
@@ -76,6 +76,6 @@ def do_photometry(catalog)
 			if 'observer' not in data_dict: data_dict['observer'] = raw_dict['OBSERVER']
 
 			catalog.entries[name].add_photometry(**data_dict)
-
+		catalog.journal_entries()
 	return
 			
