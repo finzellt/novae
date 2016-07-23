@@ -1,5 +1,9 @@
-"""The Nova AstroCatalog.
-"""
+from . import clean, compare, sorting
+from .clean import *
+from .compare import *
+from .sorting import *
 
-# from . import nova
-from . import main
+__all__ = []
+__all__.extend(sorting.__all__)
+__all__.extend(clean.__all__)
+__all__.extend(compare.__all__)

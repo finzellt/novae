@@ -1,0 +1,26 @@
+FILENAME,WAVE COL NUM,FLUX COL NUM,FLUX ERR COL NUM,FLUX UNITS,DATE,OBSERVER,TELESCOPE,INSTRUMENT,DISPERSION,WAVE RANGE 1,WAVE RANGE 2
+V992SCOX_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2449098.7199189817,Williams,CTIO 1 m,2D-Frutti,3.561475,3222.0,10462.478675
+V992SCOT_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448861.63318287,Williams,CTIO 1 m,2D-Frutti,7.874721,5990.634,10487.099691
+V992SCOH_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448808.664641204,Williams,CTIO 1 m,2D-Frutti,2.337,3591.211,7141.114
+V992SCOS_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448841.560636574,Williams,CTIO 1 m,2D-Frutti,8.263309,3018.17,7744.782748
+V992SCOM_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448822.754386574,Williams,CTIO 1 m,2D-Frutti,2.341,3590.0,7145.979
+V992SCOR_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448832.6518171295,Williams,CTIO 1 m,2D-Frutti,3.583063,3347.0,10462.963118
+V992SCOK_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448814.6610532408,Williams,CTIO 1 m,2D-Frutti,2.337,3640.0,7189.903
+V992SCOE_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448802.580983796,Williams,CTIO 1 m,2D-Frutti,2.342,3627.5,7184.998
+V992SCOJ_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448812.6698611113,Williams,CTIO 1 m,2D-Frutti,2.334,3629.464,7174.8099999999995
+V992SCOI_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448810.6612847224,Williams,CTIO 1 m,2D-Frutti,2.341,3592.052,7148.031000000001
+V992SCOG_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448806.659236111,Williams,CTIO 1 m,2D-Frutti,2.338,3600.0,7151.4220000000005
+V992SCOL_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448816.5969097223,Williams,CTIO 1 m,2D-Frutti,2.337,3590.995,7140.898
+V992SCOF_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448804.606886574,Williams,CTIO 1 m,2D-Frutti,2.341,3630.0,7185.979
+V992SCOD_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448794.762824074,Williams,CTIO 1 m,2D-Frutti,2.339,3657.823,7210.763999999999
+V992SCOO_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448826.6679050927,Williams,CTIO 1 m,2D-Frutti,2.341,3590.0,7145.979
+V992SCOC_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448783.7446875,Williams,CTIO 1 m,2D-Frutti,2.336,3652.541,7200.924999999999
+V992SCOB_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448776.701574074,Williams,CTIO 1 m,2D-Frutti,2.337,3675.848,7225.751
+V992SCON_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448824.6297800927,Williams,CTIO 1 m,2D-Frutti,2.338,3590.0,7141.4220000000005
+V992SCOP_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448830.6125,Williams,CTIO 1 m,2D-Frutti,2.336,3646.266,7194.65
+V992SCOW_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2449069.7272222224,Williams,CTIO 1 m,2D-Frutti,8.287991,2963.276,7695.718860999999
+V992SCOQ_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448832.629710648,Williams,CTIO 1 m,2D-Frutti,2.336,3646.266,7194.65
+V992SCOU_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448900.4804050927,Williams,CTIO 1 m,2D-Frutti,7.877035,5987.869,10485.655985
+V992SCOY_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2449164.5143981483,Williams,CTIO 1 m,2D-Frutti,8.272812,2998.967,7722.742652000001
+V992SCOV_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448922.495810185,Williams,CTIO 1 m,2D-Frutti,8.290421,2951.574,7685.404391
+V992SCOA_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2448772.7863194444,Williams,CTIO 1 m,2D-Frutti,2.334,3696.918,7242.264

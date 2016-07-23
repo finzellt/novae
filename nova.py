@@ -27,7 +27,7 @@ class NOVA(ENTRY):
     ERRORS = Key('errors')
 
 
-class Nnova(Entry):
+class Nova(Entry):
     """
     NOTE: OrderedDict data is just the `name` values from the JSON file.
           I.e. it does not include the highest nesting level
