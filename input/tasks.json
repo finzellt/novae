@@ -5,7 +5,7 @@
         "update": false,
         "module": "novae.tasks.photometry",
         "function": "do_photometry",
-        "repo": "input/Individual_Novae",
+        "repo": "input/cne-external",
         "priority": 1
 },
     "spectra": {
@@ -14,7 +14,7 @@
         "update": false,
         "module": "novae.tasks.spectra",
         "function": "do_spectra",
-        "repo": "input/Individual_Novae",
+        "repo": "input/cne-external",
         "priority": 2
 },
     "merge_duplicates": {

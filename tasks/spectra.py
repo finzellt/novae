@@ -2,7 +2,7 @@ from ..nova import NOVA
 from astrocats.catalog.utils import pbar
 import os
 import os.path
-from ..utils import read_spectra_ticket, get_nova_name, convert_date_UTC
+from ..utils import read_spectra_ticket, read_spectra_metadata, get_nova_name, convert_date_UTC
 import re
 import csv
 from astropy.time import Time
@@ -12,7 +12,7 @@ def do_spectra(catalog):
 	"""
 
 	#path to root ONC directory
-	ONC = ''
+	ONC = catalog.get_current_task_repo()
 	novae_directory = os.path.join(ONC, 'Individual_Novae')
 	task_str = catalog.get_current_task_str()
 
@@ -22,31 +22,31 @@ def do_spectra(catalog):
 
 		if not os.path.isdir(nova_dir) or indiv_nova is None: continue
 
-		ticket_directory = (nova_dir, "Tickets", "CompletedTickets")
+		ticket_directory = os.path.join(nova_dir, "Tickets", "CompletedTickets")
 		for ticket in os.listdir(ticket_directory):
-			raw_dict, column_dict = {}, {}			
+			ticket_raw_dict, ticket_column_dict = {}, {}			
 			if not re.search(r'spectra', ticket.lower()): continue
 
 			with open(os.path.join(ticket_directory, ticket)) as spec_ticket:
 				try:
 					ticket_raw_dict, ticket_column_dict = read_spectra_ticket(spec_ticket.read())
 					spec_ticket.close()
-
 				except AttributeError:
 					True == True
+					print(ticket)
+					continue
 					#THROW ERROR TO LOG HERE
-
-		#ticket_fields = ["OBJECT NAME: ", "FLUX UNITS: ", "FLUX ERROR UNITS: ", "WAVELENGTH REGIME: ", "TIME SYSTEM: ", "ASSUMED DATE OF OUTBURST: ", "REFERENCE: ", "BIBCODE: ", "DEREDDENED FLAG: ", "METADATA FILENAME: ", "FILENAME COLUMN: ", "WAVELENGTH COLUMN: ", "FLUX COLUMN: ", "FLUX ERROR COLUMN: ", "FLUX UNITS COLUMN: ", "DATE COLUMN: ", "TELESCOPE COLUMN: ", "INSTRUMENT COLUMN: ", "OBSERVER COLUMN: ", "SNR COLUMN: ", "DISPERSION COLUMN: ", "RESOLUTION COLUMN: ", "WAVELENGTH RANGE COLUMN: ", "TICKET STATUS: "]
-		#metadata_fields = ['FILENAME', 'WAVELENGTH COL NUM', 'FLUX COL NUM', 'FLUX ERR COL NUM', 'FLUX UNITS', 'DATE', 'OBSERVER', 'TELESCOPE', 'INSTRUMENT', 'DISPERSION', 'WAVELENGTH RANGE 1', 'WAVELENGTH RANGE 2']
-
 
 			meta_filename = ticket_raw_dict['METADATA FILENAME']
 			file_path = os.path.join(nova_dir, "Data", meta_filename)
 			
 			name = indiv_nova.replace('_', ' ')
 			name = catalog.add_entry(name)
-			source = catalog.entries[name].add_source(bibcode=ticket_raw_dict['BIBCODE'], reference=ticket_raw_dict['REFERENCE'])
-			catalog.entries.add_quantity(NOVA.ALIAS, name, source)
+			if type(ticket_raw_dict['BIBCODE']) is str and len(ticket_raw_dict['BIBCODE']) == 19:
+				source = catalog.entries[name].add_source(bibcode=ticket_raw_dict['BIBCODE'], reference=ticket_raw_dict['REFERENCE'])
+			else:
+				source = catalog.entries[name].add_source(bibcode='couldnotfindbibcode', reference=ticket_raw_dict['REFERENCE'])
+			catalog.entries[name].add_quantity(NOVA.ALIAS, name, source)
 			
 
 			time_offset = 0		
@@ -61,18 +61,18 @@ def do_spectra(catalog):
 				data_file_list = read_spectra_metadata(metadata_file.read(), ticket_column_dict)
 				metadata_file.close()
  
-			
-			for metadata_raw_dict, metadata_column_dict in data_file_list:
+			for metadata_raw_dict, metadata_column_dict in data_file_list:				
 				data_filename = metadata_raw_dict['FILENAME']
 				csvfile = open(os.path.join(nova_dir, "Data", data_filename))
-				contents = csv.reader(csvfile, delimiter=',', quotechar='"')
+				contents = list(csv.reader(csvfile, delimiter=',', quotechar='"'))
 				csvfile.close()
 
 				flux_col = metadata_column_dict['FLUX']
-				wavelength_col = metadata_column_dict['WAVELENGTH']
+				wavelength_col = metadata_column_dict['WAVE']
 				flux_err_col = metadata_column_dict['FLUX ERR']
 				
-				if flux_col or wavelength_col is None: continue
+				if flux_col is None or wavelength_col is None: continue
+				
 				flux_err_arr = None if flux_err_col is None else []
 				flux_arr, wavelength_arr = [],[]
 
@@ -81,25 +81,29 @@ def do_spectra(catalog):
 					if line[0].startswith("#"): continue
 					
 					try:
-						flux = float(lines[flux_col])
-						wavelength = float(lines[wavelength_col]) 
+						flux = line[flux_col]
+						wavelength = line[wavelength_col]
 					except (IndexError, ValueError):
 						continue
-					try: flux_err = None if flux_err_arr is None else float(lines[flux_err_col])
+					try: flux_err = None if flux_err_arr is None else line[flux_err_col]
 					except (IndexError, ValueError): flux_err = None
 					
 					if flux_err is not None: flux_err_arr.append(flux_err)
 					flux_arr.append(flux)
 					wavelength_arr.append(flux)
-				
-				data_dict = {'wavelengths'=wavelength_arr, 'fluxes'=flux_arr, 'source' = source, 'time'=metadata_raw_dict['TIME'] + offset, 
-				if len(flux_err_arr) != len(wavelength_arr):
-					data_dict['errors'] = flux_err_arr
+		
+				data_dict = {'wavelengths': wavelength_arr, 'fluxes': flux_arr, 'source': source, 'time': metadata_raw_dict['DATE'], 'observer': metadata_raw_dict['OBSERVER'], 'telescope': metadata_raw_dict['TELESCOPE'], 'instrument': metadata_raw_dict['INSTRUMENT'], 'u_wavelengths': 'Angstrom', 'u_time': 'JD', 'u_fluxes': 'erg/s/cm^2'}
 
+				if not flux_err_arr is None and len(flux_err_arr) != len(wavelength_arr):
+					data_dict['errors'] = flux_err_arr
 				
-				
+				key_list = list(data_dict.keys())
+				for key in key_list:
+					if data_dict[key] is None:
+						del data_dict[key]
+			
 				catalog.entries[name].add_spectrum(**data_dict)
-					
+				
 
 	return
 
