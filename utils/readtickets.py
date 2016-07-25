@@ -1,5 +1,8 @@
 import re
 
+__all__ = ['read_photometry_ticket', 'read_spectra_ticket','read_spectra_metadata']
+
+
 def read_photometry_ticket(contents):
 	""" Reads photometry ticket
 		Returns tuple of dictionaries (value_dict, column_dict
@@ -23,7 +26,7 @@ def read_photometry_ticket(contents):
 			else:
 				value_dict[key] = value
 		j+=1
-	if len(value_dict) + len(column_dict) != len(ticket_fields)
+	if len(value_dict) + len(column_dict) != len(ticket_fields):
 		raise AttributeError('Not a valid ticket.')
 
 	return (value_dict, column_dict)
@@ -59,7 +62,7 @@ def read_spectra_ticket(contents):
 			else:
 				value_dict[key] = value
 		j+=1
-	if len(value_dict) + len(column_dict) != len(ticket_fields)
+	if len(value_dict) + len(column_dict) != len(ticket_fields):
 		raise AttributeError('Not a valid ticket.')
 
 	return (value_dict, column_dict)
@@ -80,7 +83,7 @@ def read_spectra_metadata(contents, col_num_dict):
 			break
 
 	file_list = []
-	for i range(k, len(lines)):
+	for i in range(k,len(lines)):
 		value_dict, column_dict = {}, {}
 		for field_name in col_num_dict:
 			if col_num_dict[field_name] is None: continue

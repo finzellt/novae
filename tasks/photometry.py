@@ -1,4 +1,3 @@
-from ..nova import NOVA
 from astrocats.catalog.utils import pbar
 import os
 import os.path
@@ -7,8 +6,10 @@ import re
 import csv
 from astropy.time import Time
 
+from ..nova import NOVA
 
-def do_photometry(catalog)
+
+def do_photometry(catalog):
 	"""
 	"""
 	#path to root ONC directory
