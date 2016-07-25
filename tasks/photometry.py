@@ -37,6 +37,9 @@ def do_photometry(catalog):
 	
 		name = nova_name.replace('_', ' ')
 		name = catalog.add_entry(name)
+
+		if raw_dict['REFERENCE'].upper() == 'AAVSO': continue
+
 		if type(raw_dict['BIBCODE']) is str and len(bibcode) == 19:
 			source = catalog.entries[name].add_source(bibcode=raw_dict['BIBCODE'], reference=raw_dict['REFERENCE'])
 		else:
@@ -51,7 +54,7 @@ def do_photometry(catalog):
 		time_offset = 0
 		if re.match(r'dpo', raw_dict['TIME UNITS'].lower()):
 			t = Time(convert_date_UTC(raw_dict['ASSUMED DATE OF OUTBURST']))
-			offset = t.jd 
+			offset = t.jd
 
 		column_corr = {'TIME': 'time', 'FILTER/FREQUENCY/ENERGY RANGE': 'band', 'TELESCOPE': 'telescope', 'OBSERVER': 'observer', 'FILTER SYSTEM': None, 'UPPER LIMIT FLAG': None}
 
