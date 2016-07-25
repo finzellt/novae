@@ -1,7 +1,7 @@
 import re
 
 #works only for 1931-2030
-def convertDateUTC(date):
+def convert_date_UTC(date):
 	if re.match(r"\d(\d)?[/:\-]\d[/:\-]", date):
 		i = re.match(r"\d(\d)?[/:\-]", date).end()
 		date = date[:i] + "0" + date[i:]
