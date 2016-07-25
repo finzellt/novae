@@ -1,5 +1,7 @@
 import re
 
+__all__ = ['get_nova_name']
+
 def get_nova_name(string):
 	string = string.replace("_", "").replace(" ", "").upper()
 
