@@ -1,6 +1,0 @@
-FILENAME,WAVE COL NUM,FLUX COL NUM,FLUX ERR COL NUM,FLUX UNITS,DATE,OBSERVER,TELESCOPE,INSTRUMENT,DISPERSION,WAVE RANGE 1,WAVE RANGE 2
-V394CRAC_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2447025.485914352,Williams,CTIO 1 m,2D-Frutti,2.5,3600.0,7315.0
-V394CRAA_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2447011.528900463,Williams,CTIO 1 m,2D-Frutti,2.5,3600.0,7362.5
-V394CRAB_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2447013.5843402776,Williams,CTIO 1 m,2D-Frutti,2.5,3600.0,7362.5
-V394CRAD_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2447026.488194444,Williams,CTIO 1 m,2D-Frutti,2.5,3600.0,7315.0
-V394CRAE_Williams_Optical_Spectra.csv,0,1,NA,ergs/cm^2/sec,2447033.5177893518,Williams,CTIO 1 m,2D-Frutti,2.5,3600.0,7297.5

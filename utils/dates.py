@@ -1,5 +1,7 @@
 import re
 
+__all__ = ['convert_date_UTC']
+
 #works only for 1931-2030
 def convert_date_UTC(date):
 	if re.match(r"\d(\d)?[/:\-]\d[/:\-]", date):
