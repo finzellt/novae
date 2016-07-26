@@ -37,14 +37,7 @@ def do_photometry(catalog):
 	
 		name = nova_name.replace('_', ' ')
 		name = catalog.add_entry(name)
-<<<<<<< HEAD
 		if type(raw_dict['BIBCODE']) is str and len(raw_dict['BIBCODE']) == 19:
-=======
-
-		if raw_dict['REFERENCE'].upper() == 'AAVSO': continue
-
-		if type(raw_dict['BIBCODE']) is str and len(bibcode) == 19:
->>>>>>> d77fa0315fdd438ece326b20ac21031b8ed551ce
 			source = catalog.entries[name].add_source(bibcode=raw_dict['BIBCODE'], reference=raw_dict['REFERENCE'])
 		else:
 			source = catalog.entries[name].add_source(bibcode='1234567890123456789', reference=raw_dict['REFERENCE'])
@@ -58,11 +51,7 @@ def do_photometry(catalog):
 		time_offset = 0
 		if re.match(r'dpo', raw_dict['TIME UNITS'].lower()):
 			t = Time(convert_date_UTC(raw_dict['ASSUMED DATE OF OUTBURST']))
-<<<<<<< HEAD
 			offset = t.jd 
-=======
-			offset = t.jd
->>>>>>> d77fa0315fdd438ece326b20ac21031b8ed551ce
 
 		column_corr = {'TIME': 'time', 'FILTER/FREQUENCY/ENERGY RANGE': 'band', 'TELESCOPE': 'telescope', 'OBSERVER': 'observer', 'FILTER SYSTEM': None, 'UPPER LIMIT FLAG': None}
 
@@ -78,16 +67,9 @@ def do_photometry(catalog):
 			if line[0].startswith("#"): continue
 				
 			for key in column_dict:
-<<<<<<< HEAD
 				if column_dict[key] is None or line[column_dict[key]] == '':
 					continue
 				data_dict[column_corr[key]] = line[column_dict[key]]
-=======
-				if column_dict[key] is None:
-					continue
-				if line[column_dict[key]] != '':
-					data_dict[column_corr[key]] = line[column_dict[key]]
->>>>>>> d77fa0315fdd438ece326b20ac21031b8ed551ce
 				
 			#if re.match(r'ut', raw_dict['TIME UNITS'].lower()):
 			#	data_dict['time'] = (Time(data_dict)).jd
@@ -97,11 +79,7 @@ def do_photometry(catalog):
 			
 			if 'telescope' not in data_dict: data_dict['telescope'] = raw_dict['TELESCOPE']
 			if 'observer' not in data_dict: data_dict['observer'] = raw_dict['OBSERVER']
-<<<<<<< HEAD
 			data_dict['u_time'] = 'JD'
-=======
-			
->>>>>>> d77fa0315fdd438ece326b20ac21031b8ed551ce
 			key_list = list(data_dict.keys())
 			for key in key_list:
 				if data_dict[key] is None:
