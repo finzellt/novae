@@ -62,7 +62,8 @@ def read_spectra_ticket(contents):
 			else:
 				value_dict[key] = value
 		j+=1
-	if len(value_dict) + len(column_dict) != len(ticket_fields):
+
+	if len(value_dict) + len(column_dict) != len(ticket_fields) + 1:
 		raise AttributeError('Not a valid ticket.')
 
 	return (value_dict, column_dict)
@@ -81,6 +82,7 @@ def read_spectra_metadata(contents, col_num_dict):
 			k += 1
 		else:
 			break
+	k = 1
 
 	file_list = []
 	for i in range(k, len(lines)):
@@ -90,7 +92,7 @@ def read_spectra_metadata(contents, col_num_dict):
 
 			value = lines[i][col_num_dict[field_name]].strip()
 			title = field_name.upper().replace("ERROR", "ERR").replace("WAVELENGTH", "WAVE")
-			if (title + ' COL NUM') in metaDataFields:
+			if (title + ' COL NUM') in metadata_fields:
 				try: column_dict[title] = int(value)
 				except ValueError: column_dict[title] = None
 			else:
