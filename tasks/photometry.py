@@ -30,6 +30,8 @@ def do_photometry(catalog):
 				#print(filename)
 				continue
 				#THROW ERROR TO LOG HERE
+		
+		if raw_dict['REFERENCE'] == 'AAVSO': continue
 
 		nova_name = get_nova_name(raw_dict['OBJECT NAME'])
 		filename = raw_dict['DATA FILENAME']
@@ -37,6 +39,7 @@ def do_photometry(catalog):
 	
 		name = nova_name.replace('_', ' ')
 		name = catalog.add_entry(name)
+	
 		if type(raw_dict['BIBCODE']) is str and len(raw_dict['BIBCODE']) == 19:
 			source = catalog.entries[name].add_source(bibcode=raw_dict['BIBCODE'], reference=raw_dict['REFERENCE'])
 		else:
