@@ -132,6 +132,8 @@ class NovaCatalog(Catalog):
         # Load the local 'supernovae' repository names
         all_repos = self.PATHS.get_repo_input_folders()
         all_repos += self.PATHS.get_repo_output_folders()
+        print("I AM HERE, THESE ARE THE PATHS I SEE:")
+        print(all_repos)
         super()._clone_repos(all_repos)
         return
 

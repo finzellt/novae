@@ -14,6 +14,7 @@ def main(args, clargs, log):
     if args is None:
         return
 
+    print(args)
     catalog = NovaCatalog(args, log)
 
     # Run the subcommand given in `args`
