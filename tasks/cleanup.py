@@ -13,7 +13,7 @@ from astropy.coordinates import SkyCoord as coord
 from astropy.cosmology import Planck15 as cosmo
 from astropy.cosmology import z_at_value
 
-from cdecimal import Decimal
+from decimal import Decimal
 
 from ..constants import CLIGHT, KM, PREF_KINDS
 from ..supernova import SUPERNOVA
