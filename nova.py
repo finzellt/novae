@@ -15,7 +15,7 @@ from astrocats.catalog.utils import (bib_priority, get_sig_digits,
                                      get_source_year, is_integer, is_number,
                                      jd_to_mjd, make_date_string, pretty_num,
                                      uniq_cdl)
-from cdecimal import Decimal
+from decimal import Decimal
 
 from .constants import MAX_BANDS, PREF_KINDS, REPR_BETTER_QUANTITY
 from .utils import frame_priority, host_clean, radec_clean
