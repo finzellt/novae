@@ -69,7 +69,9 @@ class Nova(Entry):
                 return
 
     def _clean_quantity(self, quantity):
-        """Clean quantity value before it is added to entry.
+        """
+        Cleans and normalizes a quantity dictionary before adding it to an entry.
+        Returns True if cleaning is successful, False otherwise.
         """
         value = quantity.get(QUANTITY.VALUE, '').strip()
         error = quantity.get(QUANTITY.E_VALUE, '').strip()
@@ -80,79 +82,33 @@ class Nova(Entry):
         if not value:
             return False
 
-        if error and (not is_number(error) or float(error) < 0):
-            raise ValueError(self[self._KEYS.NAME] +
-                             "'s quanta " + key +
-                             ' error value must be a number and positive.')
+        if not self._validate_error(error, key):
+            return False
 
-        # Set default units
-        if not unit and key == self._KEYS.VELOCITY:
-            unit = 'km/s'
-        if not unit and key == self._KEYS.RA:
-            unit = 'hours'
-        if not unit and key == self._KEYS.DEC:
-            unit = 'degrees'
-        if not unit and key in [self._KEYS.LUM_DIST,
-                                self._KEYS.COMOVING_DIST]:
-            unit = 'Mpc'
+        unit = self._set_default_unit(unit, key)
 
         # Handle certain name
         if key == self._KEYS.ALIAS:
+            if not self._clean_alias(quantity, value):
+                return False
             value = self.catalog.clean_entry_name(value)
-            for df in quantity.get(self._KEYS.DISTINCT_FROM, []):
-                if value == df[QUANTITY.VALUE]:
-                    return False
         elif key == self._KEYS.HOST:
-            if is_number(value):
+            result = self._clean_host(value, kind)
+            if not result:
                 return False
-            if value.lower() in ['anonymous', 'anon.', 'anon',
-                                 'intergalactic']:
-                return False
-            value = host_clean(value)
-            if ((not kind and ((value.lower().startswith('abell') and
-                                is_number(value[5:].strip())) or
-                               'cluster' in value.lower()))):
-                kind = 'cluster'
+            value, kind = result
         elif key == self._KEYS.CLAIMED_TYPE:
-            isq = False
-            if value.startswith('SN '):
-                value = value.replace('SN ', '', 1)
-            value = value.replace('young', '')
-            if '?' in value:
-                isq = True
-                value = value.strip(' ?')
-            for rep in self.catalog.type_syns:
-                if value in self.catalog.type_syns[rep]:
-                    value = rep
-                    break
-            if isq:
-                value = value + '?'
+            value = self._clean_claimed_type(value)
             if not value:
                 return False
         elif key in [self._KEYS.RA, self._KEYS.DEC,
                      self._KEYS.HOST_RA, self._KEYS.HOST_DEC]:
-            (value, unit) = radec_clean(value, key, unit=unit)
+            value, unit = radec_clean(value, key, unit=unit)
         elif key == self._KEYS.MAX_DATE or key == self._KEYS.DISCOVER_DATE:
-            # Make sure month and day have leading zeroes
-            sparts = value.split('/')
-            if len(sparts[0]) > 5:
-                self._log.warn("Date year {} greater than four "
-                               "digits.".format(sparts[0]))
-            if len(sparts) >= 2:
-                value = sparts[0] + '/' + sparts[1].zfill(2)
-            if len(sparts) == 3:
-                value = value + '/' + sparts[2].zfill(2)
+            value = self._normalize_date(value)
 
-            # for ii, ct in enumerate(self.parent[key]):
-            #     # Only add dates if they have more information
-            #     if len(ct[QUANTITY.VALUE].split('/')) >
-            #            len(value.split('/')):
-            #         return False
-
-        if is_number(value):
-            value = '%g' % Decimal(value)
-        if error:
-            error = '%g' % Decimal(error)
+        value = self._format_number(value)
+        error = self._format_number(error)
 
         if value:
             quantity[QUANTITY.VALUE] = value
@@ -164,6 +120,91 @@ class Nova(Entry):
             quantity[QUANTITY.KIND] = kind
 
         return True
+
+    def _validate_error(self, error, key):
+        if error and (not is_number(error) or float(error) < 0):
+            raise ValueError(self[self._KEYS.NAME] +
+                             "'s quanta " + key +
+                             ' error value must be a number and positive.')
+        return True
+
+    def _set_default_unit(self, unit, key):
+        if not unit and key == self._KEYS.VELOCITY:
+            return 'km/s'
+        if not unit and key == self._KEYS.RA:
+            return 'hours'
+        if not unit and key == self._KEYS.DEC:
+            return 'degrees'
+        if not unit and key in [self._KEYS.LUM_DIST,
+                                self._KEYS.COMOVING_DIST]:
+            return 'Mpc'
+        return unit
+
+    def _clean_alias(self, quantity, value):
+        value = self.catalog.clean_entry_name(value)
+        for df in quantity.get(self._KEYS.DISTINCT_FROM, []):
+            if value == df[QUANTITY.VALUE]:
+                return False
+        return True
+
+    def _clean_host(self, value, kind):
+        if is_number(value):
+            return False
+        if value.lower() in ['anonymous', 'anon.', 'anon', 'intergalactic']:
+            return False
+        value = host_clean(value)
+        if ((not kind and ((value.lower().startswith('abell') and
+                            is_number(value[5:].strip())) or
+                           'cluster' in value.lower()))):
+            kind = 'cluster'
+        return value, kind
+
+    def _clean_claimed_type(self, value):
+        """
+        Cleans and normalizes a claimed type string for a nova or supernova event.
+
+        This function removes certain prefixes and substrings, handles uncertainty markers,
+        and maps synonyms to canonical type names using the catalog's type_syns dictionary.
+
+        Args:
+            value (str): The claimed type string to clean.
+
+        Returns:
+            str or bool: The cleaned type string, possibly with a '?' if uncertain,
+            or False if the resulting value is empty.
+        """
+        isq = False
+        if value.startswith('SN '):
+            value = value.replace('SN ', '', 1)
+        value = value.replace('young', '')
+        if '?' in value:
+            isq = True
+            value = value.strip(' ?')
+        for rep in self.catalog.type_syns:
+            if value in self.catalog.type_syns[rep]:
+                value = rep
+                break
+        if isq:
+            value = value + '?'
+        if not value:
+            return False
+        return value
+
+    def _normalize_date(self, value):
+        sparts = value.split('/')
+        if len(sparts[0]) > 5:
+            self._log.warn("Date year {} greater than four "
+                           "digits.".format(sparts[0]))
+        if len(sparts) >= 2:
+            value = sparts[0] + '/' + sparts[1].zfill(2)
+        if len(sparts) == 3:
+            value = value + '/' + sparts[2].zfill(2)
+        return value
+
+    def _format_number(self, val):
+        if is_number(val):
+            return '%g' % Decimal(val)
+        return val
 
     def add_quantity(self, quantity, value, source, forcereplacebetter=False,
                      **kwargs):
@@ -221,7 +262,7 @@ class Nova(Entry):
                 newquantities.append(added_quantity)
             self[quantity] = newquantities
 
-        # As all SN####xx designations have corresponding AT designations, add
+        # As all SN\####xx designations have corresponding AT designations, add
         # the AT alias when the SN alias is added.
         if quantity == self._KEYS.ALIAS:
             cleaned_quantity = quantity.strip()
